@@ -14,7 +14,7 @@ var svg = d3.select("body").append("svg")
 .attr("width", width)
 .attr("height", height);
 
-d3.json("graph.json", function(error, graph) {
+d3.json("https://raw.githubusercontent.com/from3004/theorems/master/graph.json", function(error, graph) {
 	if (error) throw error;
 
 	var link = svg.selectAll("line")
