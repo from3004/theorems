@@ -29,3 +29,14 @@
 	]
 }
 
+{
+	"nodes": [
+		{"id": "0"},
+		{"id": "1"},
+		{"id": "2"}
+	],
+	"links": [
+		{"source": "nodes[0]", "target": "nodes[1]", "left": "false", "right": "true"},
+		{"source": "nodes[1]", "target": "nodes[2]", "left": "false", "right": "true"}
+	]
+}
