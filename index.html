@@ -37,20 +37,31 @@
 		//  - nodes are known by 'id', not by index in array.
 		//  - links are always source < target; edge directions are set by 'left' and 'right'.
 		//TODO1 make this read from a data source
-		var nodes = [
-		  {id: 0},
-		  {id: 1},
-		  {id: 2}
-		],
-		links = [
-		  {source: nodes[0], target: nodes[1], left: false, right: true },
-		  {source: nodes[1], target: nodes[2], left: false, right: true }
-		];
 
+		d3.json("https://raw.githubusercontent.com/from3004/theorems/master/graph.json", function(error, graph) {
+			//if (error) throw error;
+
+			force
+				.nodes(graph.nodes)
+				.links(graph.links)
+				.start();
+
+			var link = svg.selectAll('.link')
+				.data(links)
+				.enter().append("svg:path")
+				.attr("class", "link")
+				.attr("marker-end", "url(#end)");
+
+			var node = svg.selectAll('.node')
+				.data(nodes)
+				.enter().append('circle')
+				.attr('class', 'node')
+				.attr('r', 5)
+				.call(force.drag); // this bit allows us to drag nodes and stuff around		
+			})
+		
 		//Init the actual D3 Force layout
 		var force = d3.layout.force()
-		  .nodes(nodes)
-		  .links(links)
 		  .size([width,height])
 		  .linkDistance(150) // Affects how the layout attempts to space nodes
 		  .charge(-500) // helps deal with overlaps; another way to help space the nodes
@@ -69,20 +80,7 @@
 			.append("path")
 			.attr("d", "M0,-5L10,0L0,5")
 
-		// make links and nodes be a thing
-		var link = svg.selectAll('.link')
-			.data(links)
-			.enter().append("svg:path")
-			.attr("class", "link")
-			.attr("marker-end", "url(#end)");
-
-		var node = svg.selectAll('.node')
-			.data(nodes)
-			.enter().append('circle')
-			.attr('class', 'node')
-			.attr('r', 5)
-			.call(force.drag) // this bit allows us to drag nodes and stuff around		
-		
+		//get the thing to auto-paint whenever the force layout updates	
 		force.on("tick", function() {
 			link.attr("d", function(d) {
 				var dx = d.target.x - d.source.x,
@@ -100,11 +98,6 @@
 			.attr("transform", function(d) { 
 				return "translate(" + d.x + "," + d.y + ")"; });
 		});
-
-		
-		// It begins!
-		force.start();
-
 	</script>
 </html>
 
